@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -10,10 +10,14 @@ function App() {
   const [searchParams, setSearchParams] =  useSearchParams()
   const activeTab = useMemo(() => searchParams.get("tab"), [searchParams])
 
+  useEffect(() => {
+    if(!activeTab) return setSearchParams(p => ({tab: "character"}));
+  },[activeTab])
+
   return (
     <>
       <Navbar activeTab={activeTab} />
-      <Home setSearchParams={setSearchParams} activeTab={activeTab}/>
+      {activeTab && <Home setSearchParams={setSearchParams} activeTab={activeTab}/>}
     </>
   )
 }

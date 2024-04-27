@@ -46,14 +46,13 @@ const CardsTypes = {
     }
 }
 
-function Home({activeTab, setSearchParams}) {
+function Home({activeTab}) {
     const [data, setData] = useState(null)
     const [isLoading ,setIsLoading] = useState(false)
     const [filters, setFilters] = useState({}) 
 
 
     useEffect(() => {
-        if(!activeTab) return setSearchParams(p => ({tab: Items[0].key}));
         (async () => {
             setIsLoading(true)
             try {
