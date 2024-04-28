@@ -74,7 +74,7 @@ const Filter = ({ data = {}, setFilters, tab, filter = {} }) => {
 
 
   return (
-    <FilterContainer>
+    <FilterContainer className='filter'>
       {Object.entries(data).map(([section, options]) => (
         <FilterSection key={section}>
             <SectionTitle>{section}</SectionTitle>

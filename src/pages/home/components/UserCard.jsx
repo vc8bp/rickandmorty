@@ -1,4 +1,5 @@
 import React from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // Single Card Component
@@ -9,6 +10,8 @@ const CardContainer = styled.div`
   padding: 20px;
   margin-bottom: 20px;
   transition: transform 0.3s ease;
+  cursor: pointer;
+
 
   &:hover {
     transform: translateY(-5px);
@@ -32,8 +35,9 @@ const CardText = styled.p`
 `;
 
 const UserCard = ({ data }) => {
+  const navigate = useNavigate()
   return (
-    <CardContainer>
+    <CardContainer onClick={() => navigate(`/character/${data.id}`, { state: {character: data}})} >
       <CardImage src={data?.image} alt={data?.name} />
       <CardTitle>{data?.name}</CardTitle>
       <CardText>Status: {data?.status}</CardText>

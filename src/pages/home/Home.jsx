@@ -7,19 +7,28 @@ import LocationCard from './components/LocationCard';
 import EpisodeCard from './components/EpisodeCard';
 import SearchBar from './components/SearchBar';
 import Filter from './components/Filter';
+import Pagination from '../../components/Pagination';
 
-const ListContainer = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 20px;
-`;
 
 const Container = styled.div`
     display: flex;
     margin: 1rem;
     box-sizing: border-box;
     gap: 1rem;
+
+    @media screen and (max-width: 700px) {
+        flex-direction: column;
+
+        >div{
+            width: 100% !important;
+        }
+    }
+`
+
+const Main = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 `
 
 const CardsTypes = {
@@ -41,42 +50,52 @@ const CardsTypes = {
         filters: {
             gender: ["female", "male", "genderless", "unknown"],
             status: ["alive", "dead", "unknown"],
-            species: ["alien", "human", "Humanoid", "Poopybutthole"]
+            species: ["alien", "human", "Humanoid", "Poopybutthole", "Cronenberg", "robot"]
         }
     }
 }
 
-function Home({activeTab}) {
+function Home({activeTab, setSearchParams}) {
     const [data, setData] = useState(null)
     const [isLoading ,setIsLoading] = useState(false)
     const [filters, setFilters] = useState({}) 
+    const [page, setPage] = useState(1)
+
+    useEffect(() => {
+        setPage(1)
+        if(!activeTab) return setSearchParams(p => ({tab: "character"}));
+    },[activeTab])
 
 
     useEffect(() => {
         (async () => {
             setIsLoading(true)
             try {
-                const {data} = await publicRequest.get(activeTab, { params: filters[activeTab]})
+                const {data} = await publicRequest.get(activeTab, { params: { ...filters[activeTab], page}})
                 setData(data)
             } catch (error) {
                 console.log(error)
             }
             setIsLoading(false)
         })()
-    },[activeTab, filters])
+    },[activeTab, filters, page])
 
-  return (
+  return !activeTab ? null : (
     <>
         <SearchBar setFilters={setFilters} tab={activeTab} filter={filters[activeTab]?.name} />
         <Container>
             <Filter data={CardsTypes[activeTab].filters} setFilters={setFilters} tab={activeTab} filter={filters[activeTab]} />
             {data && (
-                <ListContainer>
-                    {isLoading ? "LOADING...." : data.results.map((character) => {
-                        const Card = CardsTypes[activeTab].component;
-                        return <Card key={character.id} data={character} />
-                    })}
-                </ListContainer>
+                <Main>
+                    <div className='items'>
+                        {isLoading ? "LOADING...." : data.results.map((character) => {
+                            const Card = CardsTypes[activeTab].component;
+                            return <Card key={character.id} data={character} />
+                        })}
+                    </div>
+                    <Pagination total={data.info.pages} setPage={setPage} page={page} />
+                </Main>
+
             )}
         </Container>
     </>

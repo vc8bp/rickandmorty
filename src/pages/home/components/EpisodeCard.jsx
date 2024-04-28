@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // Single Episode Card Component
@@ -9,6 +10,7 @@ const EpisodeCardContainer = styled.div`
   padding: 20px;
   margin-bottom: 20px;
   transition: transform 0.3s ease;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-5px);
@@ -26,8 +28,9 @@ const EpisodeText = styled.p`
 `;
 
 const EpisodeCard = ({ data }) => {
+  const navigate = useNavigate()
   return (
-    <EpisodeCardContainer>
+    <EpisodeCardContainer onClick={() => navigate(`/episode/${data.id}`)}>
       <EpisodeTitle>{data?.name}</EpisodeTitle>
       <EpisodeText>Air Date: {data?.air_date}</EpisodeText>
       <EpisodeText>Episode: {data?.episode}</EpisodeText>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // Single Location Card Component
@@ -9,6 +10,8 @@ const LocationCardContainer = styled.div`
   padding: 20px;
   margin-bottom: 20px;
   transition: transform 0.3s ease;
+  cursor: pointer;
+
 
   &:hover {
     transform: translateY(-5px);
@@ -26,8 +29,9 @@ const LocationText = styled.p`
 `;
 
 const LocationCard = ({ data }) => {
+  const navigate = useNavigate()
   return (
-    <LocationCardContainer>
+    <LocationCardContainer onClick={() => navigate(`/location/${data.id}`)} >
       <LocationTitle>{data?.name}</LocationTitle>
       <LocationText>Type: {data?.type}</LocationText>
       <LocationText>Dimension: {data?.dimension}</LocationText>
