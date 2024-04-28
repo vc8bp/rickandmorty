@@ -68,6 +68,7 @@ function Home({activeTab, setSearchParams}) {
 
 
     useEffect(() => {
+        if(!activeTab) return;
         (async () => {
             setIsLoading(true)
             try {
@@ -80,6 +81,7 @@ function Home({activeTab, setSearchParams}) {
         })()
     },[activeTab, filters, page])
 
+    console.log(activeTab)
   return !activeTab ? null : (
     <>
         <SearchBar setFilters={setFilters} tab={activeTab} filter={filters[activeTab]?.name} />
